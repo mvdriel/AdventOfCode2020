@@ -1,16 +1,16 @@
 <?php
 
 $input = trim(file_get_contents('input'));
-$adapters = explode("\n", $input);
+$adapters = array_map('intval', explode("\n", $input));
 
-$adapters[] = max($adapters) + 3;
-$adapters[] = 0;
+$adapters = array_merge($adapters, [0, max($adapters) + 3]);
 
 sort($adapters);
 
 $counts = [];
 for ($i = 1; $i < count($adapters); $i++) {
-    $counts[$adapters[$i] - $adapters[$i-1]] = ($counts[$adapters[$i] - $adapters[$i-1]] ?? 0) + 1;
+    $diff = $adapters[$i] - $adapters[$i - 1];
+    $counts[$diff] = ($counts[$diff] ?? 0) + 1;
 }
 
 var_dump($counts[1] * $counts[3]);

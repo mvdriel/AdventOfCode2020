@@ -1,23 +1,24 @@
 <?php
 
 $input = trim(file_get_contents('input'));
+$adapters = array_map('intval', explode("\n", $input));
 
-$adapters = explode("\n", $input);
-
-$adapters[] = max($adapters) + 3;
-$adapters[] = 0;
+$first = 0;
+$last = max($adapters) + 3;
+$adapters = array_merge($adapters, [$first, $last]);
 
 sort($adapters);
 
 $counts = [];
-$counts[0] = 1;
+$counts[$first] = 1;
 
-for ($i = 0; $i < count($adapters); $i++) {
-    for ($j = 1; $j < 4; $j++) {
-        if (in_array($adapters[$i] + $j, $adapters)) {
-            $counts[$adapters[$i] + $j] = ($counts[$adapters[$i] +$j] ?? 0) + ($counts[$adapters[$i]] ?? 0);
+foreach ($adapters as $adapter) {
+    for ($i = 1; $i < 4; $i++) {
+        $target = $adapter + $i;
+        if (in_array($target, $adapters, true)) {
+            $counts[$target] = ($counts[$target] ?? 0) + ($counts[$adapter] ?? 0);
         }
     }
 }
 
-var_dump($counts[max($adapters)]);
+var_dump($counts[$last]);
