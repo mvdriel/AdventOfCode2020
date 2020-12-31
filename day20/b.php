@@ -102,16 +102,12 @@ for ($y = 0; $y < $size; $y++) {
 $total = mergeMap($map, $transformations);
 
 $count = $monsterCount = 0;
-$finalMap = null;
-$finalPositions = [];
 for ($i = 0; $i < 8; $i++) {
     $transformed = transform($total, $i);
     $positions = findMonsters($transformed);
     if (count($positions) >= $monsterCount) {
-        $finalMap = $transformed;
         $monsterCount = count($positions);
         $count = countRoughWaters($transformed, $positions);
-        $finalPositions = $positions;
     }
 }
 
