@@ -79,7 +79,7 @@ for ($y = 0; $y < $size; $y++) {
         }
 
         if ($transformation > 3) {
-            $transformation = 4 + (($transformation + 4 + $direction) % 4);
+            $transformation = 4 + (($transformation + $direction) % 4);
         } else {
             $transformation = (($transformation + 4 - $direction) % 4);
         }
@@ -89,18 +89,10 @@ for ($y = 0; $y < $size; $y++) {
         $map[$y][$x] = array_keys($connection)[0];
 
         $newTransformation = array_values($connection)[0];
-        if ($direction === 2) {
-            if ($newTransformation > 3) {
-                $newTransformation -= 4;
-            } else {
-                $newTransformation += 4;
-            }
+        if ($newTransformation > 3) {
+            $newTransformation = (($newTransformation + 2 + $direction) % 4);
         } else {
-            if ($newTransformation > 3) {
-                $newTransformation = (($newTransformation + 2 + $direction) % 4);
-            } else {
-                $newTransformation = 4 + (($newTransformation + 2 - $direction) % 4);
-            }
+            $newTransformation = 4 + (($newTransformation + 2 - $direction) % 4);
         }
 
         $transformations[$y][$x] = $newTransformation;
