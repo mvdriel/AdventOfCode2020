@@ -1,7 +1,6 @@
 <?php
 
 $input = trim(file_get_contents('input'));
-
 $lines = explode("\n\n", $input);
 
 foreach ($lines as $tile) {
@@ -9,22 +8,25 @@ foreach ($lines as $tile) {
     $number = substr($tile[0], strlen('Tile '), -1);
     $tile = array_map(function($row) {
         return array_map(function($cell) {
-            return strtr($cell, ['.' => false, '#' => true]);
-        }, str_split($row));
+            return (bool) $cell;
+        }, str_split(strtr($row, ['.' => '0', '#' => '1'])));
     }, array_slice($tile, 1));
     $tiles[$number] = $tile;
 }
 
 $size = (int) sqrt(count($tiles));
 
-//                   # 
-// #    ##    ##    ###
-//  #  #  #  #  #  #   
-$monster = [
-    [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, false],
-    [true, false, false, false, false, true, true, false, false, false, false, true, true, false, false, false, false, true, true, true],
-    [false, true, false, false, true, false, false, true, false, false, true, false, false, true, false, false, true, false, false, false],
-];
+$monster = <<<EOF
+                  # 
+#    ##    ##    ###
+ #  #  #  #  #  #   
+EOF;
+
+$monster = array_map(function($row) {
+    return array_map(function($cell) {
+        return (bool) $cell;
+    }, str_split(strtr($row, [' ' => '0', '#' => '1'])));
+}, explode("\n", $monster));
 
 $connections = [];
 foreach ($tiles as $number0 => $tile0) {
