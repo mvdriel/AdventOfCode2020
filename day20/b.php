@@ -211,18 +211,14 @@ function findMonsters($map) {
     $positions = [];
     for ($y = 0; $y < count($map) - count($monster) + 1; $y++) {
         for ($x = 0; $x < count($map[$y]) - count($monster[0]) + 1; $x++) {
-            $valid = true;
             for ($my = 0; $my < count($monster); $my++) {
                 for ($mx = 0; $mx < count($monster[$my]); $mx++) {
-                    if (($monster[$my][$mx] !== false) && ($map[$y + $my][$x + $mx] !== true)) {
-                        $valid = false;
-                        break 2;
+                    if (($monster[$my][$mx] === true) && ($map[$y + $my][$x + $mx] !== true)) {
+                        continue 3;
                     }
                 }
             }
-            if ($valid) {
-                $positions[] = [$y, $x];
-            }
+            $positions[] = [$y, $x];
         }
     }
 
@@ -262,15 +258,11 @@ function countRoughWaters($map, $monsters) {
         }
     }
 
-    $count = 0;
-
-    foreach ($map as $row) {
-        foreach ($row as $cell) {
-            if ($cell === true) {
-                $count++;
-            }
-        }
-    }
+    $count = array_sum(array_map(function($row) {
+        return count(array_filter($row, function($cell) {
+            return $cell === true;
+        }));
+    }, $map));
 
     return $count;
 }
